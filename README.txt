@@ -1,0 +1,1 @@
+Automatic scripts in Cypress for websites.
