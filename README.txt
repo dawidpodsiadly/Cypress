@@ -1,4 +1,3 @@
-I practice here automatic tests in Cypress for websites.
-Go into cypress/integration to see all scripts.
+I practice here automatic tests in Cypress for http://automationpractice.com
 
-All scripts have been done for http://automationpractice.com
+
