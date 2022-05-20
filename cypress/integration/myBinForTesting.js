@@ -1,30 +1,28 @@
 import 'cypress-file-upload';
 
+import contactUsPage from "../support/page-object/contactUsPage"
+
 describe("E2E - Home Page", () => {
+
+    const emailName = "test@gmail.com";
+    const wrongEmailName = "testgmail.com";
+    const orderNumber = 83214;
+    const filName = "test.png";
+    const testMessage = "Random message for test";
+
+
     it("Completes the form (Customer service) with incorrect email", () => {
-        cy.visit("/?controller=contact");
-        cy.get("#message").type("Random message for test.")
-        cy.get("#email").type("emailgmail.com")
-        cy.get("#id_order").type("874237");
-        cy.get("p.form-group.form-error").should("have.class", "form-error"); 
-        cy.get("#id_contact").select("Webmaster");
+
+        cy.visit("http://automationpractice.com/index.php?controller=contact");
+        cy.get('[title="Contact Us"]').click();
+        contactUsPage.fillForm(0, emailName, orderNumber, filName, testMessage);
+        cy.get("#fileUpload").attachFile("");
+        contactUsPage.checkTrueEmail();
+        contactUsPage.clickSend();
+        contactUsPage.checkErrorInfo();
+
         
-        const fixtureFile = 'test.png';
-        cy.get("#fileUpload").attachFile(fixtureFile);
-
-        cy.get('[class="filename"]').then(name => {
-            expect(name).to.contain("test.png")
-        })
-
-        cy.get("span").parents("#submitMessage").click();
-
-        cy.get("p").parents("#center_column").find("p").first().then(error => {
-            cy.wrap(error).should("contain", "There is 1 error");
-        })
-
-        cy.get("li").parents("#center_column").find("li").first().then(error => {
-            cy.wrap(error).should("contain", "Invalid email address.");
-        })
+        
     })
 })
   

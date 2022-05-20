@@ -1,102 +1,93 @@
 /// <reference types = "cypress" />
 import 'cypress-file-upload';
+import contactUsPage from "../support/page-object/contactUsPage"
 
-describe("E2E - Home Page", () => {
+describe("E2E - Filling the 'Contact us' form", () => {
+
+    const emailName = "test@gmail.com";
+    const orderNumber = 83214;
+    const filName = "test.png";
+    const testMessage = "Random message for test";
+
     it("Completes the form (Customer service)", () => {
-        // Fills the values ​​into the form 
         cy.visit("/");
-        cy.get('[title="Contact Us"]').click();
-        cy.get("#message").type("Random message for test.");
-        cy.get("#email").type("test@gmail.com");
-        cy.get("#id_order").type("874237");
-        cy.get("p.form-group.form-ok").should("have.class", "form-ok"); 
-        cy.get("#id_contact").select("Customer service");
-        
-        const fixtureFile = 'test.png';
-        cy.get("#fileUpload").attachFile(fixtureFile);
-        cy.get('[class="filename"]').then(name => {
-            expect(name).to.contain("test.png")
-        })
+        cy.get('[title="Contact Us"]')
+        .should("contain", "Contact us")
+        .click();
 
-        cy.get("span").parents("#submitMessage").click();
-        cy.get('[class="alert alert-success"]').then(confirmation => {
-            expect(confirmation).to.contain("Your message has been successfully sent to our team.");
-        })
+        contactUsPage
+        .fillForm(1, emailName, orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .checkTrueEmail()
+        .clickSend()
+        .verifyEndMessage();
     })
 
     it("Completes the form (Webmaster)", () => {
-        // Fills the values ​​into the form 
-        cy.visit("/?controller=contact");
-        cy.get("#message").type("Random message for test.")
-        cy.get("#email").type("test@gmail.com");
-        cy.get("#id_order").type("874237");
-        cy.get("p.form-group.form-ok").should("have.class", "form-ok"); 
-        cy.get("#id_contact").select("Webmaster");
-
-        const fixtureFile = 'test.png';
-        cy.get("#fileUpload").attachFile(fixtureFile);
-        cy.get('[class="filename"]').then(name => {
-            expect(name).to.contain("test.png")
-        })
-
-        cy.get("span").parents("#submitMessage").click();
-        cy.get('[class="alert alert-success"]').then(confirmation => {
-            expect(confirmation).to.contain("Your message has been successfully sent to our team.");
-        })
+        contactUsPage
+        .visitFormPage()
+        .fillForm(2, emailName, orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .checkTrueEmail()
+        .clickSend()
+        .verifyEndMessage();
     })
 
-    it("Completes the form (Customer service) with incorrect email", () => {
-        // Fills the values ​​into the form 
-        cy.visit("/?controller=contact");
-        cy.get("#message").type("Random message for test.")
-        cy.get("#email").type("emailgmail.com")
-        cy.get("#id_order").type("874237");
-        cy.get("p.form-group.form-error").should("have.class", "form-error"); 
-        cy.get("#id_contact").select("Webmaster");
-        
-        const fixtureFile = 'test.png';
-        cy.get("#fileUpload").attachFile(fixtureFile);
+    it("Completes the form without choosen subject", () => {
+        contactUsPage
+        .visitFormPage()
+        .fillForm(0, emailName, orderNumber, filName, testMessage)
+        .checkTrueEmail()
+        .clickSend()
+        .subjectErrorInfo();
 
-        cy.get('[class="filename"]').then(name => {
-            expect(name).to.contain("test.png")
-        })
-
-        cy.get("span").parents("#submitMessage").click();
-
-        cy.get("p").parents("#center_column").find("p").first().then(error => {
-            cy.wrap(error).should("contain", "There is 1 error");
-        })
-
-        cy.get("li").parents("#center_column").find("li").first().then(error => {
-            cy.wrap(error).should("contain", "Invalid email address.");
-        })
+        //Completes the form with correct data
+        contactUsPage
+        .clearForm()
+        .fillForm(1, emailName, orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .subjectErrorInfo()
+        .clickSend()
+        .verifyEndMessage();
     })
 
-    it("Completes the form (Webmaster) with incorrect email", () => {
-        // Fills the values ​​into the form
-        cy.visit("/?controller=contact");
-        cy.get("#message").type("Random message for test.")
-        cy.get("#email").type("emailgmail.com")
-        cy.get("#id_order").type("874237");
-        cy.get("p.form-group.form-error").should("have.class", "form-error"); 
-        cy.get("#id_contact").select("Webmaster");
-        
-        const fixtureFile = 'test.png';
-        cy.get("#fileUpload").attachFile(fixtureFile);
+    it("Completes the form with wrong email", () => {
+        contactUsPage
+        .visitFormPage()
+        .fillForm(1, "testgmail.com", orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .checkFalseEmail()
+        .clickSend()
+        .emailErrorInfo();
 
-        cy.get('[class="filename"]').then(name => {
-            expect(name).to.contain("test.png")
-        })
+        //Completes the form with correct data
+        contactUsPage
+        .clearForm()
+        .fillForm(1, emailName, orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .emailErrorInfo()
+        .clickSend()
+        .verifyEndMessage();
+    })
 
-        cy.get("span").parents("#submitMessage").click();
+    it("Completes the form with blank message input", () => {
+        contactUsPage  
+        .visitFormPage()
+        .fillForm(1, emailName, orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .checkTrueEmail()
+        .clearMessageInput()
+        .clickSend()
+        .messageErrorInfo();
 
-        cy.get("p").parents("#center_column").find("p").first().then(error => {
-            cy.wrap(error).should("contain", "There is 1 error");
-        })
-
-        cy.get("li").parents("#center_column").find("li").first().then(error => {
-            cy.wrap(error).should("contain", "Invalid email address.");
-        })
+        //Completes the form with correct 
+        contactUsPage
+        .clearForm()
+        .fillForm(1, emailName, orderNumber, filName, testMessage)
+        .checkTextInfo()
+        .messageErrorInfo()
+        .clickSend()
+        .verifyEndMessage();
     })
 })
 

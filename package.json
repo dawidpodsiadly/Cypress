@@ -17,5 +17,8 @@
   "devDependencies": {
     "cypress": "^9.6.1",
     "cypress-file-upload": "^5.0.8"
+  },
+  "dependencies": {
+    "chai-colors": "^1.0.1"
   }
 }
