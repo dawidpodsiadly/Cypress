@@ -1,10 +1,11 @@
 import 'cypress-file-upload';
-import chaiColors from 'chai-colors'
+import chaiColors from 'chai-colors';
 chai.use(chaiColors);
 
 // Fills everything in Form.
 
 class contactUsPage {
+
     get message() {
         return cy.get("#message");
     }
