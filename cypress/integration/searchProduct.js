@@ -3,7 +3,6 @@
 describe("E2E - Home Page", () => {
     it("Looks for the product", () => {
 
-
         const lookTime = 1000; // Time for my eye
 
         cy.visit("/");

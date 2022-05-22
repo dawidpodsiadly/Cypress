@@ -73,11 +73,13 @@ class contactUsPage {
 
     checkTrueEmail() {
         this.email
-        .should("have.css", "color").and('be.colored', '#35b33f');
+        .should("have.css", "color")
+        .and('be.colored', '#35b33f');
     }
 
     checkFalseEmail() {
-        this.email.should("have.css", "color").and('be.colored', '#f13340');
+        this.email.should("have.css", "color")
+        .and('be.colored', '#f13340');
     }
 
     clickSend() {
@@ -88,7 +90,8 @@ class contactUsPage {
     verifyEndMessage() {
         this.endMessage
         .should("contain", "Your message has been successfully sent to our team.")
-        .and("have.css", "background-color").and('be.colored', '#55c65e');
+        .and("have.css", "background-color")
+        .and('be.colored', '#55c65e');
     }
 
     subjectErrorInfo() {
