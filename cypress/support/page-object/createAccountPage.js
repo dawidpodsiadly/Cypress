@@ -1,4 +1,6 @@
 import chaiColors from 'chai-colors';
+import { faker } from '@faker-js/faker';
+
 chai.use(chaiColors);
 
 const name = "John";
@@ -22,6 +24,9 @@ class createAccountPage {
         return cy.get("#id_gender1");
     }
     
+    get genders() {
+        return cy.get('input[name="id_gender"]');
+    }
     get titleMrs() {
         return cy.get("#id_gender1");
     }
@@ -137,10 +142,18 @@ class createAccountPage {
         this.signIn.click();
     }
 
-    fillCreateAccount() {
+    fillCreateAccount(title) {
         // Fills personal information
-        this.titleMrs.check()
-        this.titleMr.check()
+
+            this.titleMrs.then((Mrs) => {
+                if(title == 1)
+                    Mrs.check();
+                else
+                    this.titleMr.check();
+            }) 
+
+            this.titleMrs.check();
+
         this.firstName.type(name);
         this.lastName.type(surname);
         this.password.type("12345");

@@ -1,19 +1,28 @@
-import 'cypress-file-upload';
+/// <reference types = "cypress" />
+import createAccountPage from "../support/page-object/createAccountPage"
+import { faker } from '@faker-js/faker';
 
-import contactUsPage from "../support/page-object/contactUsPage"
+describe("E2E - Register account", () => {
 
-describe("E2E - Home Page", () => {
-    it("Completes the form (Customer service) with incorrect email", () => {
-
-        cy.visit("http://automationpractice.com/index.php?controller=authentication&back=my-account#account-creation");
-        cy.get("#email_create").type("test50@interia.com");
-        cy.get("#SubmitCreate").click();
-        cy.get("#id_gender1").check();
-        cy.get("#id_gender1").uncheck();
-
-
+        const email = faker.internet.email();
+    it("Creates new account", () => {
+        cy.visit("/");
+        createAccountPage.goToRegistration();
+        createAccountPage.InputEmail(email);
+        cy.wait(7000);
         
-        
+        const flag = "Mrs"; 
+        //createAccountPage.InputEmail("Mr");
+        cy.get('input[name="id_gender"]').then((test) => {
+        if(flag == "Mr")
+            cy.get(test).eq(0).check().should("be.checked");
+        else 
+            cy.get(test).eq(1).check().should("be.checked");
+    
+           //// if(flag == 1)
+               //cy.get(dupa).check();
+         //   else
+               // cy.get("#id_gender1").check();
+        })
     })
 })
-  
