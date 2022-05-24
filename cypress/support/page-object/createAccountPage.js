@@ -24,7 +24,7 @@ class createAccountPage {
         return cy.get("#id_gender1");
     }
     
-    get genders() {
+    get gender() {
         return cy.get('input[name="id_gender"]');
     }
     get titleMrs() {
@@ -145,15 +145,12 @@ class createAccountPage {
     fillCreateAccount(title) {
         // Fills personal information
 
-            this.titleMrs.then((Mrs) => {
-                if(title == 1)
-                    Mrs.check();
-                else
-                    this.titleMr.check();
-            }) 
-
-            this.titleMrs.check();
-
+         this.gender.then(gen => {
+            if(title == "Mr")
+                cy.get(gen).eq(0).check().should("be.checked");
+            else
+                cy.get(gen).eq(1).check().should("be.checked");
+            })
         this.firstName.type(name);
         this.lastName.type(surname);
         this.password.type("12345");

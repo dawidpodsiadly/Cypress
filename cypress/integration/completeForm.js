@@ -3,7 +3,6 @@ import 'cypress-file-upload';
 import contactUsPage from "../support/page-object/contactUsPage"
 
 describe("E2E - Filling the 'Contact us' form", () => {
- // https://www.cypress.io/blog/2019/01/03/stop-using-page-objects-and-start-using-app-actions/
     const emailName = "test@gmail.com";
     const orderNumber = 83214;
     const filName = "test.png";
