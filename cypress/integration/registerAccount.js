@@ -1,17 +1,50 @@
 /// <reference types = "cypress" />
-import createAccountPage from "../support/page-object/createAccountPage"
-import { faker } from '@faker-js/faker';
+import registerAccountPage from "../support/page-object/registerAccountPage"
 
 describe("E2E - Register account", () => {
 
-        const email = faker.internet.email();
-    it("Creates new account", () => {
+    //Personal inforamtion
+
+    it("Register new account with all data filled", () => {
+        const Gender = "Mr";
+        const bDay = "1";
+        const mDay = "January";
+        const yDay = "1996";
+        const ifNewsletter = true;
+        const ifOffers = true;
+
         cy.visit("/");
-        createAccountPage.goToRegistration();
-        createAccountPage.InputEmail(email);
-        cy.wait(10000);
-        createAccountPage.fillCreateAccount(1);
-        createAccountPage.isCorrect(email);
-        createAccountPage.endRegister();
+        registerAccountPage.goToRegistration();
+        registerAccountPage.inputEmail();
+
+        cy.wait(7000);
+
+        registerAccountPage.fillCreateAccount(Gender, bDay, mDay, yDay, ifNewsletter, ifOffers);
+        registerAccountPage.isCorrect(Gender, bDay, mDay, yDay, ifNewsletter, ifOffers);
+        registerAccountPage.endRegister();
+    })
+
+    it("Register new account with other data", () => {
+        const Gender = "Mrs";
+        const bDay = "2";
+        const mDay = "February";
+        const yDay = "1997";
+        const ifNewsletter = false;
+        const ifOffers = false;
+
+        cy.visit("/index.php?controller=authentication&back=my-account");
+        registerAccountPage.inputEmail();
+
+        cy.wait(7000);
+
+        registerAccountPage.fillCreateAccount(Gender, bDay, mDay, yDay, ifNewsletter, ifOffers);
+        registerAccountPage.isCorrect(Gender, bDay, mDay, yDay, ifNewsletter, ifOffers);
+        registerAccountPage.endRegister();
+
+    })
+
+    it("Tries register account which has been already registered", () => {
+        cy.visit("/index.php?controller=authentication&back=my-account");
+        registerAccountPage.inputTakenEmail();
     })
 })
