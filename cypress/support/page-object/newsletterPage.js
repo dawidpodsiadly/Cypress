@@ -31,6 +31,7 @@ class newsletterPage {
         .type("tes9t@gmail.com");
 
         this.sendButton.click();
+
         this.finalMessage
         .should("contain", " Newsletter : You have successfully subscribed to this newsletter.")
         .and("have.class", "alert alert-success")
@@ -44,6 +45,7 @@ class newsletterPage {
         this.newsletterInput
         .should("have.value", "Enter your e-mail")
         .type("tes5tgmail.com");
+
         this.sendButton.click();
 
         this.errorMessage
@@ -59,6 +61,7 @@ class newsletterPage {
         this.newsletterInput
         .should("have.value", "Enter your e-mail")
         .type("test@gmail.com");
+
         this.sendButton.click();
 
         this.errorMessage
@@ -68,7 +71,4 @@ class newsletterPage {
         this.newsletterInput.should("have.value", "This email address is already registered.")
     }
 }
-// value="This email address is already registered."
-
-// Newsletter : This email address is already registered.
 export default new newsletterPage

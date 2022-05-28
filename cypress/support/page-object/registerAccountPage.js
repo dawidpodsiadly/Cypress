@@ -3,21 +3,21 @@ import { faker } from '@faker-js/faker';
 
 chai.use(chaiColors);
 
-const firstNameFaker = faker.name.firstName();
+var firstNameFaker = faker.name.firstName();
  //Personal information
-const lastNameFaker = faker.name.lastName();
-const passwordFaker = faker.internet.password();
-const emailFaker = faker.internet.email();
+ var lastNameFaker = faker.name.lastName();
+ var passwordFaker = faker.internet.password();
+ var emailFaker = faker.internet.email();
 // Address information
-const companyFaker = faker.company.companyName();
-const address1Faker = faker.address.streetAddress();
-const address2Faker = faker.address.streetAddress();
-const cityFaker = faker.address.cityName();
-const stateFaker = faker.address.state();
-const postalCodeFaker = faker.address.zipCode("#####");
-const messageInfoFaker = faker.random.words();
-const homePhoneFaker = faker.phone.phoneNumber("###-###-###");
-const mobilePhoneFaker = faker.phone.phoneNumber("###-###-###");
+var companyFaker = faker.company.companyName();
+var address1Faker = faker.address.streetAddress();
+var address2Faker = faker.address.streetAddress();
+var cityFaker = faker.address.cityName();
+var stateFaker = faker.address.state();
+var postalCodeFaker = faker.address.zipCode("#####");
+var messageInfoFaker = faker.random.words();
+var homePhoneFaker = faker.phone.phoneNumber("###-###-###");
+var mobilePhoneFaker = faker.phone.phoneNumber("###-###-###");
 
 class registerAccountPage {
 
@@ -142,6 +142,25 @@ class registerAccountPage {
         return cy.get(".info-account");
     }
 
+    generateFakerData() {
+     //Personal information
+    firstNameFaker = faker.name.firstName();
+    lastNameFaker = faker.name.lastName();
+    passwordFaker = faker.internet.password();
+    emailFaker = faker.internet.email();
+
+    // Address information
+    companyFaker = faker.company.companyName();
+    address1Faker = faker.address.streetAddress();
+    address2Faker = faker.address.streetAddress();
+    cityFaker = faker.address.cityName();
+    stateFaker = faker.address.state();
+    postalCodeFaker = faker.address.zipCode("#####");   
+    messageInfoFaker = faker.random.words();
+    homePhoneFaker = faker.phone.phoneNumber("###-###-###");
+    mobilePhoneFaker = faker.phone.phoneNumber("###-###-###");
+    }
+
     goToRegistration() { 
         this.signIn.should("contain", "Sign in");
         this.signIn.click();
@@ -161,7 +180,7 @@ class registerAccountPage {
         .should("have.value", "test@gmail.com");
         this.submitCreate
         .click();
-
+        
         cy.wait(4000);
 
         cy.get("li").parents("#create_account_error").find("li").first()
@@ -213,6 +232,20 @@ class registerAccountPage {
         this.additionalInfo.type(messageInfoFaker);
         this.homePhone.type(homePhoneFaker);
         this.mobilePhone.type(mobilePhoneFaker);
+    }
+
+    fillDemandingDataOnly() {
+        // Fills personal information
+        this.firstName.type(firstNameFaker).should("have.value", firstNameFaker);
+        this.lastName.type(lastNameFaker).should("have.value", lastNameFaker);
+        this.password.type(passwordFaker).should("have.value", passwordFaker);
+
+        //Fills address information
+        this.address1.type(address1Faker).should("have.value", address1Faker);
+        this.city.type(cityFaker).should("have.value", cityFaker);
+        this.state.select(stateFaker).should("contain", stateFaker);
+        this.postalCode.type(postalCodeFaker).should("have.value", postalCodeFaker);
+        this.mobilePhone.type(mobilePhoneFaker).should("have.value", mobilePhoneFaker);
     }
 
     isCorrect(title, bDay, mDay, yDay, ifNewsletter, ifOffers) {
@@ -283,6 +316,17 @@ class registerAccountPage {
         this.alias
         .should("have.value", "My address");
 
+    }
+
+    checkErrors() {
+        this.registerButton.click();
+        cy.get("p").parents(".alert-danger").find("p").first().then(err => {
+            expect(err).to.have.prop("outerText", "There are 8 errors");
+        })
+
+        cy.get(".alert-danger").find("li").then(num => {
+            expect(num).to.have.length(8);
+        })
     }
 
     endRegister() {
