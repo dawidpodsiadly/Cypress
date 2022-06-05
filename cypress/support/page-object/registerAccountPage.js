@@ -3,11 +3,11 @@ import { faker } from '@faker-js/faker';
 
 chai.use(chaiColors);
 
+//Personal information
 var firstNameFaker = faker.name.firstName();
- //Personal information
- var lastNameFaker = faker.name.lastName();
- var passwordFaker = faker.internet.password();
- var emailFaker = faker.internet.email();
+var lastNameFaker = faker.name.lastName();
+var passwordFaker = faker.internet.password();
+var emailFaker = faker.internet.email();
 // Address information
 var companyFaker = faker.company.companyName();
 var address1Faker = faker.address.streetAddress();

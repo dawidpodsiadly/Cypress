@@ -3,5 +3,9 @@
     "includeShadowDom": true,
     "chromeWebSecurity": true,
     "viewportHeight": 1080,
-    "viewportWidth": 1920
+    "viewportWidth": 1920,
+    "env": {
+        "email":"testdawida@gmail.com",
+        "password":"LegOfButterfly"
+     }
 }
